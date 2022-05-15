@@ -5,7 +5,7 @@ const pool = new Pool({
     user: config?.pgUser,
     host: config?.pgHost,
     database: config?.pgDatabase,
-    password: config?.pgPassword,
+    // password: config?.pgPassword,
     port: config?.pgPort,
     ssl: config?.pgSsl,
     max: config?.pgMax,
