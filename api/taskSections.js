@@ -11,7 +11,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into task_sections (name, order, project_id) values($1, $2, $3) returning *',
                 [name, order, project_id]
             );
@@ -26,7 +26,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from task_sections where id = $1',
                 [id]
             );
@@ -41,7 +41,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from task_sections where id = $1',
                 [id]
             );
@@ -53,7 +53,7 @@ module.exports = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update task_sections set name = $1, order = $2, project_id = $3, timestamp = $4 where id = $5 returning *',
                 [name, order, project_id, new Date(), id]
             );
@@ -68,7 +68,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'delete from task_sections where id = $1',
                 [id]
             );

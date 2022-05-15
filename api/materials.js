@@ -14,7 +14,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into materials (name, type, checked, link, order, project_id) values($1, $2, $3, $4, $5, $6) returning *',
                 [name, type, checked, link, order, project_id]
             );
@@ -29,7 +29,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from materials where id = $1',
                 [id]
             );
@@ -44,7 +44,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from materials where id = $1',
                 [id]
             );
@@ -60,7 +60,7 @@ module.exports = {
                 ...(req.body || {})
             };
 
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update materials set name = $1, type = $2, checked = $3, link = $4, order = $5, project_id = $6, timestamp = $7 where id = $8 returning *',
                 [name, type, checked, link, order, project_id, new Date(), id]
             );
@@ -75,7 +75,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dpResponse = pool.query(
+            const dpResponse = await pool.query(
                 'delete from materials where id = $1',
                 [id]
             );

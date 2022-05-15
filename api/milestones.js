@@ -13,7 +13,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into milestones (name, description, date, time, project_id) values($1, $2, $3, $4, $5) returning *',
                 [name, description, date, time, project_id]
             );
@@ -28,7 +28,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from milestones where id = $1',
                 [id]
             );
@@ -43,7 +43,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from milestones where id = $1',
                 [id]
             );
@@ -58,7 +58,7 @@ module.exports = {
                 ...(req.body || {})
             };
 
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update milestones set name = $1, description = $2, date = $3, time = $4, project_id = $5 where id = $6 returning *',
                 [name, description, date, time, project_id, id]
             );
@@ -73,7 +73,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dpResponse = pool.query(
+            const dpResponse = await pool.query(
                 'delete from milestones where id = $1',
                 [id]
             );

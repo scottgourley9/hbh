@@ -11,7 +11,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into resources (link, name, description) values($1, $2, $3) returning *',
                 [link, name, description]
             );
@@ -26,7 +26,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from resources where id = $1',
                 [id]
             );
@@ -41,7 +41,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from resources where id = $1',
                 [id]
             );
@@ -53,7 +53,7 @@ module.exports = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update resources set link = $1, name = $2, description = $3, timestamp = $4 where id = $5 returning *',
                 [link, name, description, new Date(), id]
             );
@@ -68,7 +68,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'delete from resources where id = $1',
                 [id]
             );

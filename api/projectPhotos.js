@@ -12,7 +12,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into project_images (project_id, image_url, order, name) values($1, $2, $3, $4) returning *',
                 [project_id, image_url, order, name]
             );
@@ -27,7 +27,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from project_images where id = $1',
                 [id]
             );
@@ -42,7 +42,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from project_images where id = $1',
                 [id]
             );
@@ -55,7 +55,7 @@ module.exports = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update project_images set project_id = $1, image_url = $2, order = $3, name = $4, timestamp = $5 where id = $6 returning *',
                 [project_id, image_url, order, name, new Date(), id]
             );
@@ -70,7 +70,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'delete from project_images where id = $1',
                 [id]
             );

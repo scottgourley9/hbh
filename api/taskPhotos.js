@@ -10,7 +10,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into task_photos (image_url, task_id) values($1, $2) returning *',
                 [image_url, task_id]
             );
@@ -25,7 +25,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from task_photos where id = $1',
                 [id]
             );
@@ -40,7 +40,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from task_photos where id = $1',
                 [id]
             );
@@ -51,7 +51,7 @@ module.exports = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update task_photos set image_url = $1, task_id = $2 where id = $3 returning *',
                 [image_url, task_id, id]
             );
@@ -66,7 +66,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'delete from task_photos where id = $1',
                 [id]
             );

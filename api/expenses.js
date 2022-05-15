@@ -15,7 +15,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into expenses (name, amount, category, color, receipt_image_url, order, project_id) values($1, $2, $3, $4, $5, $6, $7) returning *',
                 [name, amount, category, color, receipt_image_url, order, project_id]
             );
@@ -30,7 +30,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from expenses where id = $1',
                 [id]
             );
@@ -45,7 +45,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from expenses where id = $1',
                 [id]
             );
@@ -61,7 +61,7 @@ module.exports = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update expenses set name = $1, amount = $2, category = $3, color = $4, receipt_image_url = $5, order = $6, project_id = $7, timestamp = $8 where id = $9 returning *',
                 [name, amount, category, color, receipt_image_url, order, project_id, new Date(), id]
             );
@@ -76,7 +76,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'delete from expenses where id = $1',
                 [id]
             );

@@ -14,7 +14,7 @@ module.exports = {
         } = req?.body || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'insert into moodboard_images (image_url, order, name, width, height, project_id) values($1, $2, $3, $4, $5, $6) returning *',
                 [image_url, order, name, width, height, project_id]
             );
@@ -29,7 +29,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'select * from moodboard_images where id = $1',
                 [id]
             );
@@ -44,7 +44,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbReadResponse = pool.query(
+            const dbReadResponse = await pool.query(
                 'select * from moodboard_images where id = $1',
                 [id]
             );
@@ -59,7 +59,7 @@ module.exports = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
-            const dbUpdateResponse = pool.query(
+            const dbUpdateResponse = await pool.query(
                 'update moodboard_images set image_url = $1, order = $2, name = $3, width = $4, height = $5, project_id = $6, timestamp = $7 where id = $8 returning *',
                 [image_url, order, name, width, height, project_id, new Date(), id]
             );
@@ -74,7 +74,7 @@ module.exports = {
         } = req?.params || {};
 
         try {
-            const dbResponse = pool.query(
+            const dbResponse = await pool.query(
                 'delete from moodboard_images where id = $1',
                 [id]
             );
