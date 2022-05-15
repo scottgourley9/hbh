@@ -20,6 +20,7 @@ const users = {
                 );
                 res.status(200).json(dbResponse?.rows?.[0]);
             } catch (e) {
+                console.log(error);
                 res.status(500).json('Error creating user');
             }
         }
