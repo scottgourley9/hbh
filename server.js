@@ -16,9 +16,10 @@ const taskItemsApi = require('./api/taskItems');
 const taskPhotosApi = require('./api/taskPhotos');
 const taskSectionsApi = require('./api/taskSections');
 const usersApi = require('./api/users');
+const mediaApi = require('./api/media');
 
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '20mb' }));
 
 app.get('/health', (req, res) => {
     res.status(200).json('Healthy');
@@ -78,6 +79,8 @@ app.post('/users/create', usersApi?.create);
 app.get('/users/read/:id', usersApi?.read);
 app.put('/users/update/:id', usersApi?.update);
 app.delete('/users/delete/:id', usersApi?.delete);
+
+app.post('/media/create', mediaApi?.create);
 
 app.listen(config?.port, function(){
     console.log('listening on port ' + config?.port);
