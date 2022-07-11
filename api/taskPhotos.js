@@ -34,6 +34,21 @@ module.exports = {
             res.status(500).json('Error reading task_photo');
         }
     },
+    readAll: async (req, res) => {
+        const {
+            task_id
+        } = req?.params || {};
+
+        try {
+            const dbResponse = await pool.query(
+                'select * from task_photos where task_id = $1',
+                [task_id]
+            );
+            res.status(200).json(dbResponse?.rows);
+        } catch (e) {
+            res.status(500).json('Error reading task_photo');
+        }
+    },
     update: async (req, res) => {
         const {
             id

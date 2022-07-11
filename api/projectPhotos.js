@@ -7,14 +7,14 @@ module.exports = {
         const {
             project_id,
             image_url,
-            order,
+            ui_order,
             name
         } = req?.body || {};
 
         try {
             const dbResponse = await pool.query(
-                'insert into project_images (project_id, image_url, order, name) values($1, $2, $3, $4) returning *',
-                [project_id, image_url, order, name]
+                'insert into project_images (project_id, image_url, ui_order, name) values($1, $2, $3, $4) returning *',
+                [project_id, image_url, ui_order, name]
             );
             res.status(200).json(dbResponse?.rows?.[0]);
         } catch (e) {
@@ -49,15 +49,15 @@ module.exports = {
             const {
                 project_id,
                 image_url,
-                order,
+                ui_order,
                 name
             } = {
                 ...(dbReadResponse?.rows?.[0] || {}),
                 ...(req.body || {})
             };
             const dbUpdateResponse = await pool.query(
-                'update project_images set project_id = $1, image_url = $2, order = $3, name = $4, timestamp = $5 where id = $6 returning *',
-                [project_id, image_url, order, name, new Date(), id]
+                'update project_images set project_id = $1, image_url = $2, ui_order = $3, name = $4, timestamp = $5 where id = $6 returning *',
+                [project_id, image_url, ui_order, name, new Date(), id]
             );
             res.status(200).json(dbUpdateResponse?.rows?.[0]);
         } catch (e) {

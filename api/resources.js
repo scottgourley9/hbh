@@ -35,6 +35,17 @@ module.exports = {
             res.status(500).json('Error reading resource');
         }
     },
+    readAll: async (req, res) => {
+        try {
+            const dbResponse = await pool.query(
+                'select * from resources'
+            );
+
+            res.status(200).json(dbResponse?.rows);
+        } catch (e) {
+            res.status(500).json('Error reading resources');
+        }
+    },
     update: async (req, res) => {
         const {
             id
