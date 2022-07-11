@@ -12,6 +12,7 @@ const users = {
             email,
             password
         } = req?.body || {};
+        console.log('BODY: ', req.body);
 
         const query = async ps => {
             try {
@@ -23,6 +24,7 @@ const users = {
 
                 jwt.sign({ userId: user?.id }, config.privateTokenKey, { expiresIn: 1000 * 60 * 60 * 24 * 30 }, (err, token) => {
                     if (err) {
+                        console.log(err);
                         return res.status(500).json('Error creating auth token');
                     } else {
                         res.status(200).json({ user, token });
@@ -37,6 +39,7 @@ const users = {
         if (password) {
             bcrypt.hash(password, config?.saltRounds, (err, hash) => {
                 if (err) {
+                    console.log(e);
                     res.status(500).json('Error hashing password');
                 } else {
                     query(hash);
