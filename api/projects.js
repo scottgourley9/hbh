@@ -68,6 +68,17 @@ module.exports = {
             res.status(500).json('Error reading project');
         }
     },
+    readAllShareable: async (req, res) => {
+        try {
+            const dbResponse = await pool.query(
+                'select id, name, budget from projects where shareable = true ORDER BY timestamp DESC'
+            );
+
+            res.status(200).json(dbResponse?.rows || []);
+        } catch (e) {
+            res.status(500).json('Error reading shareables');
+        }
+    },
     update: async (req, res) => {
         const {
             id

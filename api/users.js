@@ -12,7 +12,6 @@ const users = {
             email,
             password
         } = req?.body || {};
-        console.log('BODY: ', req.body);
 
         const query = async ps => {
             try {

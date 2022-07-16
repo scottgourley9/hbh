@@ -55,6 +55,7 @@ app.delete('/projectPhotos/delete/:id', projectPhotosApi?.delete);
 app.post('/projects/create', projectsApi?.create);
 app.get('/projects/read/:id', projectsApi?.read);
 app.get('/projects/readAll/:user_id', projectsApi?.readAll);
+app.get('/projects/shareable/readAll', projectsApi?.readAllShareable);
 app.put('/projects/update/:id', projectsApi?.update);
 app.delete('/projects/delete/:id', projectsApi?.delete);
 
