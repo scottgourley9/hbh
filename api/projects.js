@@ -148,5 +148,77 @@ module.exports = {
         } catch (e) {
             res.status(500).json('Error deleting project');
         }
+    },
+    templateCreateCopy: async (req, res) => {
+        const {
+            idToCopy
+        } = req?.body || {};
+
+        try {
+            const projectRes = await pool.query(
+                `
+                    insert into projects (user_id, name, cover_photo, budget, status, color, duration, ui_order)
+                    select user_id, name, cover_photo, budget, status, color, duration, ui_order from projects where id = $1
+                    returning id
+                `,
+                [idToCopy]
+            );
+            const newProjectId = projectRes?.rows?.[0]?.id;
+            const sectionsInsertRes = await pool.query(
+                `
+                    insert into task_sections (name, ui_order, project_id)
+                    select name, ui_order, ${newProjectId} from task_sections where project_id = $1
+                `,
+                [idToCopy]
+            );
+            const sectionsGetRes = await pool.query(
+                `
+                    select id from task_sections where project_id = $1
+                `,
+                [newProjectId]
+            );
+            const promises = (sectionsGetRes?.rows || []).map(obj => {
+                const sectionId = obj?.id;
+
+                return pool.query(
+                    `
+                        insert into task_items (name, description, ui_order, checked, date, time, video, photo, section_id, project_id, color, user_id)
+                        select name, description, ui_order, checked, date, time, video, photo, ${sectionId}, ${newProjectId}, color, user_id from task_items where project_id = $1
+                    `,
+                    [idToCopy]
+                );
+            });
+            const promisesRes = await Promise.all(promises);
+            const promisesRest = await Promise.all([
+                pool.query(
+                    `
+                        insert into expenses (name, amount, category, color, receipt_image_url, ui_order, project_id)
+                        select name, amount, category, color, receipt_image_url, ui_order, ${newProjectId} from expenses where project_id = $1
+                    `,
+                    [idToCopy]
+                ),
+                pool.query(
+                    `
+                        insert into materials (name, type, checked, link, ui_order, project_id)
+                        select name, type, checked, link, ui_order, ${newProjectId} from materials where project_id = $1
+                    `,
+                    [idToCopy]
+                ),
+                pool.query(
+                    `
+                        insert into moodboard_images (image_url, ui_order, name, width, height, project_id)
+                        select image_url, ui_order, name, width, height, ${newProjectId} from moodboard_images where project_id = $1
+                    `,
+                    [idToCopy]
+                )
+            ]);
+
+            res.status(200).json({
+                projectId: newProjectId
+            });
+        } catch (e) {
+            console.log(e);
+            res.status(500).json('Error creating template project');
+        }
     }
 }
